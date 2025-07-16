@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
   <title>Company Graph</title>
+  <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
   <style>
     html, body, #cy {
       width: 100%;
@@ -24,6 +24,7 @@
       alert("No data provided in b64data param");
     } else {
       const json = JSON.parse(atob(b64data));
+
       const elements = [
         ...json.companies.map(c => ({
           data: { id: c.id, name: c.name }
@@ -44,36 +45,41 @@
           {
             selector: 'node',
             style: {
+              'background-color': '#0074D9',
               'label': 'data(name)',
+              'color': '#ffffff',
               'text-valign': 'center',
               'text-halign': 'center',
-              'background-color': '#0074D9',
-              'color': '#ffffff',
-              'font-size': '14px',
               'text-wrap': 'wrap',
-              'width': 'label',
-              'padding': '10px'
+              'font-size': '12px',
+              'width': '80px',
+              'height': '80px',
+              'shape': 'ellipse'
             }
           },
           {
             selector: 'edge',
             style: {
-              'label': 'data(label)',
               'width': 2,
-              'line-color': '#aaa',
-              'target-arrow-color': '#aaa',
+              'line-color': '#ccc',
+              'target-arrow-color': '#ccc',
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier',
-              'font-size': '12px',
+              'label': 'data(label)',
+              'font-size': '10px',
               'text-background-opacity': 1,
-              'text-background-color': '#fff',
-              'text-background-padding': '2px'
+              'text-background-color': '#ffffff',
+              'text-background-padding': '2px',
+              'text-margin-y': -10
             }
           }
         ],
         layout: {
-          name: 'cose',
-          animate: true
+          name: 'breadthfirst',
+          directed: true,
+          spacingFactor: 1.5,
+          animate: false,
+          orientation: 'horizontal'
         }
       });
     }
