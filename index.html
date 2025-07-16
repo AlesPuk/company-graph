@@ -5,21 +5,29 @@
   <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
   <title>Company Graph</title>
   <style>
-    html, body, #cy { width: 100%; height: 100%; margin: 0; padding: 0; }
+    html, body, #cy {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
   </style>
 </head>
 <body>
   <div id="cy"></div>
   <script>
-    // Get base64-encoded JSON from URL
     const params = new URLSearchParams(window.location.search);
     const b64data = params.get("b64data");
+
     if (!b64data) {
       alert("No data provided in b64data param");
     } else {
       const json = JSON.parse(atob(b64data));
       const elements = [
-        ...json.companies.map(c => ({ data: { id: c.id, name: c.name } })),
+        ...json.companies.map(c => ({
+          data: { id: c.id, name: c.name }
+        })),
         ...json.relationships.map(r => ({
           data: {
             source: r.source,
@@ -28,14 +36,45 @@
           }
         }))
       ];
+
       cytoscape({
         container: document.getElementById('cy'),
         elements: elements,
         style: [
-          { selector: 'node', style: { label: 'data(name)', 'background-color': '#0074D9', color: '#fff' }},
-          { selector: 'edge', style: { label: 'data(label)', 'line-color': '#ccc', width: 2 }}
+          {
+            selector: 'node',
+            style: {
+              'label': 'data(name)',
+              'text-valign': 'center',
+              'text-halign': 'center',
+              'background-color': '#0074D9',
+              'color': '#ffffff',
+              'font-size': '14px',
+              'text-wrap': 'wrap',
+              'width': 'label',
+              'padding': '10px'
+            }
+          },
+          {
+            selector: 'edge',
+            style: {
+              'label': 'data(label)',
+              'width': 2,
+              'line-color': '#aaa',
+              'target-arrow-color': '#aaa',
+              'target-arrow-shape': 'triangle',
+              'curve-style': 'bezier',
+              'font-size': '12px',
+              'text-background-opacity': 1,
+              'text-background-color': '#fff',
+              'text-background-padding': '2px'
+            }
+          }
         ],
-        layout: { name: 'cose' }
+        layout: {
+          name: 'cose',
+          animate: true
+        }
       });
     }
   </script>
